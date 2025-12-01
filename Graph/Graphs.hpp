@@ -79,6 +79,9 @@ public:
 
     vector<int> Getfollowing(Users &user);
     vector<int> FetDollowing(int &userid);
+    int getnodeid(Users&u);
+    int getnodeid(int&uid);
+
 };
 
 #endif

@@ -104,3 +104,11 @@ vector<int> Graph::Getfollowing(Users &user) {
 vector<int> Graph::FetDollowing(int &userid) {
     return this->Getfollowing(IDtoUser[userid]);
 }
+int Graph::getnodeid(Users&u){
+    CheckExistance(u);
+    return indexmapper[u.getId()];
+}
+int Graph::getnodeid(int&uid){
+    CheckExistance(IDtoUser[uid]);
+    return indexmapper[uid];
+}
