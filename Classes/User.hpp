@@ -47,10 +47,15 @@ private:
     Users(const string& s, int x) : name(s), id(x) {}
 
 public:
+    Users() = default;
+    Users(const Users&) = default;
+    Users& operator=(const Users&) = default;
+    ~Users() = default;
     friend class UsersBuilder;  // Only UsersBuilder can create Users
 
     string getName() const { return name; }
     int getId() const { return id; }
+    void setname( string s) { this->name=s; }
     const vector<int>& getFollowers() const { return followersid; }
     const vector<Posts>& getPosts() const { return posts; }
 

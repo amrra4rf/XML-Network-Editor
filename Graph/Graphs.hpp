@@ -1,3 +1,42 @@
+/**
+ * Graph.hpp
+ * 
+ * Purpose:
+ * - Defines the Graph class used to represent a social media network as a graph.
+ * - Each user is a node, and follow/follower relationships are directed edges.
+ * - Supports:
+ *      - Adding users
+ *      - Adding follower / following edges
+ *      - Adding posts to users
+ *      - Querying followers/following
+ * 
+ * Internal Structure:
+ * - vector<Users> users:
+ *        Stores all user objects by index. Each user's position is its graph node index.
+ * 
+ * - unordered_map<int, Users> IDtoUser:
+ *        Maps user ID → full Users object.
+ * 
+ * - unordered_map<int, int> indexmapper:
+ *        Maps user ID → node index inside `users` vector.
+ * 
+ * - vector<vector<int>> Followers_id:
+ *        For each node index, stores IDs of followers.
+ * 
+ * - vector<vector<int>> Following_id:
+ *        For each node index, stores IDs the user follows.
+ * 
+ * - UsersBuilder ubuild:
+ *        Creates new Users if XML references a user that wasn't created yet.
+ * 
+ * Notes:
+ * - getNodeIndex(): safely converts user ID to node index.
+ * - AddUser() handles:
+ *        → new user insertion
+ *        → update existing user name if duplicate
+ * - AddFollower / AddFollow both support auto-creating missing users.
+ */
+
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 
@@ -5,83 +44,38 @@
 #include "Classes/Posts.hpp"
 #include "Classes/User.hpp"
 
-using namespace std;
-
-/**
- * CLASS: Graph
- * ---------------------------------------------------------------
- * This class represents the main social-network graph structure.
- *
- * Nodes:
- *   - Each node is a user (stored in the `users` vector).
- *
- * Edges:
- *   - Followers_id[i]  = list of user IDs that follow user at index i
- *   - Following_id[i]  = list of user IDs that user at index i follows
- *
- * Internal Representation:
- *   - Users are stored in `vector<Users> users`, indexed 0..N-1.
- *   - A user’s real ID (from XML) maps to an internal index using:
- *         indexmapper[userID] = index
- *
- * Access Maps:
- *   - IDtoUser: maps userID → Users object (quick existence check).
- *   - indexmapper: maps userID → position inside `users` vector.
- *
- * Graph Builder:
- *   - UsersBuilder ubuild is used to create new Users when adding by (name, id).
- *
- * Core Operations:
- *   - AddUser(): insert new user and allocate adjacency lists.
- *   - AddFollower(): "user A follows user B" relation.
- *   - AddFollow(): same relation but opposite direction call.
- *   - AddPost(): attaches a Post to the internal user object.
- *   - GetFollowers() / GetFollowing(): return adjacency lists.
- *
- * Notes:
- *   - Followers and following lists store **user IDs**, not indices.
- *   - For graph analysis, users are accessed quickly using index mapping.
- *   - Class supports insertion before or after follower exists.
- *
- * Purpose:
- *   - Designed for parsing XML into a graph.
- *   - Used for social-network analysis (influencers, suggestions, etc.).
- * ---------------------------------------------------------------
- */
-
 class Graph {
 private:
-    vector<Users> users;                            // All users in index form
-    unordered_map<int, Users> IDtoUser;             // ID → full User object
-    unordered_map<int, int> indexmapper;            // ID → index in users[]
+    std::vector<Users> users;
+    std::unordered_map<int, Users> IDtoUser;
+    std::unordered_map<int, int> indexmapper;
 
-    vector<vector<int>> Followers_id;               // followers adjacency
-    vector<vector<int>> Following_id;               // following adjacency
+    std::vector<std::vector<int>> Followers_id;
+    std::vector<std::vector<int>> Following_id;
 
-    UsersBuilder ubuild;                            // tool to construct Users
+    UsersBuilder ubuild;
+
+    int getNodeIndex(int uid) const;
 
 public:
     Graph() = default;
-    Graph(UsersBuilder &ubuild2);
+    Graph(UsersBuilder& ubuild2);
 
-    void AddUser(Users &user);
-    void AddUser(string &name, int id);
+    bool AddUser(Users& user);
+    bool AddUser(std::string& name, int id);
 
-    void CheckExistance(const Users &user) const;
+    void CheckExistance(const Users& user) const;
 
-    bool AddFollower(Users &tofollow, int followerid);
-    bool AddFollow(Users &follower, int tofollowid);
+    bool AddFollower(Users& tofollow, int followerid);
+    bool AddFollow(Users& follower, int tofollowid);
 
-    void AddPost(Posts &p, Users &writer);
+    void AddPost(Posts& p, Users& writer);
 
-    vector<int> GetFollowers(Users &user);
-    vector<int> GetFollowers(int &userid);
+    std::vector<int> GetFollowers(Users& user);
+    std::vector<int> GetFollowers(int& userid);
 
-    vector<int> Getfollowing(Users &user);
-    vector<int> FetDollowing(int &userid);
-    int getnodeid(Users&u);
-    int getnodeid(int&uid);
-
+    std::vector<int> Getfollowing(Users& user);
+    std::vector<int> FetDollowing(int& userid);
 };
 
 #endif
