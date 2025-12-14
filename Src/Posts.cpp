@@ -27,20 +27,19 @@ Notes:
 */
 
 
-#ifndef POSTS_HPP
-#define POSTS_HPP
+
 
 #include <bits/stdc++.h>
 using namespace std;
 
-class Posts {
+class Post{
 private:
     string content;
     unordered_set<string> topics;
     int id;
 
     // Private constructor: only PostsBuilder can create Posts
-    Posts(const string& s, const initializer_list<string>& heads, int x)
+    Post(const string& s, const initializer_list<string>& heads, int x)
         : content(s), topics(heads), id(x) {}
 
 public:
@@ -57,10 +56,10 @@ private:
     static unordered_set<int> uniqueids;  // Keep track of used IDs
 
 public:
-    Posts CreatePost(const string& s, const initializer_list<string>& heads, int x) {
+    Post CreatePost(const string& s, const initializer_list<string>& heads, int x) {
         if (!uniqueids.count(x)) {
             uniqueids.insert(x);
-            return Posts(s, heads, x);
+            return Post(s, heads, x);
         }
         throw runtime_error("Ids must be unique");
     }
@@ -69,4 +68,4 @@ public:
 // Define the static member
 unordered_set<int> PostsBuilder::uniqueids;
 
-#endif // POSTS_HPP
+
