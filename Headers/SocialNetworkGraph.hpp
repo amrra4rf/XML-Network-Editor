@@ -1,6 +1,6 @@
     
 #include <bits/stdc++.h>
-#include "Src/Posts.cpp"
+#include "Src/Post.cpp"
 #include "Src/User.cpp"
 #include "Src/Graph.cpp"
 using namespace std;

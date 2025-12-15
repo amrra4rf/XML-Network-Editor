@@ -1,4 +1,6 @@
 #include "Graph.hpp"
+#include "Post.hpp"
+#include "User.hpp"
 
 using namespace std;
 
@@ -154,7 +156,4 @@ bool Graph::isFollowing(int followerId, int followeeId)  {
     return true;
     return false;
 }
-
-
-
 

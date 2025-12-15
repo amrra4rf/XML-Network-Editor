@@ -1,5 +1,5 @@
 /**
- * Graph.hpp
+ * 
  * 
  * Purpose:
  * - Defines the Graph class used to represent a social media network as a graph.
@@ -40,8 +40,9 @@
 
 
 #include <bits/stdc++.h>
-#include "Src/Posts.cpp"
-#include "Src/User.cpp"
+#include "Src/Post.cpp"
+#include "User.hpp"
+#include "User.cpp"
 using namespace std;
 class Graph {
 private:
