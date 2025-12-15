@@ -37,6 +37,11 @@ bool Graph::AddUser(Users& user) {
 
     Followers_id.push_back({});
     Following_id.push_back({});
+    if(user.getFollowers().size()>0){
+        for(const auto f:user.getFollowers()){
+            this->AddFollower(this->users[idx],f);
+        }
+    }
 
     return true;
 }
@@ -123,4 +128,8 @@ vector<int> Graph::Getfollowing(Users& user) {
 
 vector<int> Graph::FetDollowing(int& userid) {
     return this->Getfollowing(IDtoUser[userid]);
+}
+
+Users Graph::getuserfromID(int id){
+    return IDtoUser[id];
 }

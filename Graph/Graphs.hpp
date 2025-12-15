@@ -41,8 +41,8 @@
 #define GRAPH_HPP
 
 #include <bits/stdc++.h>
-#include "Classes/Posts.hpp"
-#include "Classes/User.hpp"
+#include "../Classes/Posts.hpp"
+#include "../Classes/User.hpp"
 
 class Graph {
 private:
@@ -70,6 +70,8 @@ public:
     bool AddFollow(Users& follower, int tofollowid);
 
     void AddPost(Posts& p, Users& writer);
+
+    Users getuserfromID(int id);
 
     std::vector<int> GetFollowers(Users& user);
     std::vector<int> GetFollowers(int& userid);
