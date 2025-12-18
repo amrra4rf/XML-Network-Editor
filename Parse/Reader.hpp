@@ -12,6 +12,7 @@ private:
     Graph network;
 
     std::string extractValue(const std::string& line);
+    string strip(string&s);
 
 public:
     Reader(const std::string& file);

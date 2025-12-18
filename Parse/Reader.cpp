@@ -11,6 +11,18 @@ string Reader::extractValue(const string& line) {
     return line.substr(start, end - start);
 }
 
+string Reader::strip(string& s) {
+    while (!s.empty() && s.back() == ' ')
+        s.pop_back();
+
+
+    while (!s.empty() && s.front() == ' ')
+        s.erase(s.begin());
+
+    return s;
+}
+
+
 
 
 void Reader::read() {
@@ -42,13 +54,15 @@ void Reader::read() {
 
         // -------- USER ID --------
         else if (line.find("<id>") != string::npos && inUser && !inFollowers) {
-            currentUserId = stoi(extractValue(line));
+            getline(xml,line);
+            currentUserId = stoi(strip(line));
             u.setid(currentUserId);
         }
 
         // -------- USER NAME --------
         else if (line.find("<name>") != string::npos) {
-            currentUserName = extractValue(line);
+            getline(xml,line);
+            currentUserName = strip(line);
             u.setname(currentUserName);
         }
 
@@ -65,11 +79,13 @@ void Reader::read() {
         }
 
         else if (line.find("<body>") != string::npos && inPost) {
-            currentPost.setBody(extractValue(line));
+            getline(xml,line);
+            currentPost.setBody(strip(line));
         }
 
         else if (line.find("<topic>") != string::npos && inPost) {
-            currentPost.addTopic(extractValue(line));
+            getline(xml,line);
+            currentPost.addTopic(strip(line));
         }
 
         else if (line.find("</post>") != string::npos) {
@@ -87,8 +103,10 @@ void Reader::read() {
         }
 
         else if (line.find("<follower>") != string::npos && inFollowers) {
-            getline(xml, line); // <id>X</id>
-            int followerId = stoi(extractValue(line));
+            getline(xml, line);
+            getline(xml,line);
+             // <id>X</id>
+            int followerId = stoi(strip(line));
              u.addFollower(followerId);
         }
     }
