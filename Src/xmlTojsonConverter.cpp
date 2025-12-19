@@ -164,31 +164,3 @@ public://this method takes xml string and convert it to jason
 
 
 
-
-
-
-int main()
-{
-
-
-    std::string filename;
-    std::cout << "Enter XML file path: ";
-    std::getline(std::cin, filename);
-
-    // Open the file
-    std::ifstream file(filename);
-    if (!file) {
-        std::cerr << "Error: Could not open file.\n";
-        return 1;
-    }
-
-    // Read entire file into a string
-    std::stringstream buffer;
-    buffer << file.rdbuf();   // copies whole file
-    std::string xmlContent = buffer.str();
-
-    // Optionally print the content
-    // 
-    string n = jasonConverter::convert(xmlContent);
-    cout << n;
-}
