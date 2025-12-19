@@ -15,18 +15,11 @@ int Graph::getNodeIndex(int uid) const {
 bool Graph::AddUser(Users& user) {
     int uid = user.getId();
 
-    if (IDtoUser.find(uid) != IDtoUser.end()) {
-        Users& mapRef = IDtoUser[uid];
-        mapRef.setname(user.getName());
-
-        if (indexmapper.find(uid) == indexmapper.end())
-            throw runtime_error("Inconsistent state: ID exists in map but not in indexmapper");
-
-        int idx = indexmapper.at(uid);
-        if (idx < 0 || idx >= (int)users.size())
-            throw runtime_error("Index out of range for existing user");
-
-        users[idx].setname(user.getName());
+    auto it = IDtoUser.find(uid);
+    if (it != IDtoUser.end()) {
+        it->second = user;  // overwrite existing user entirely
+        int idx = indexmapper[uid];
+        users[idx] = user;
         return false;
     }
 
@@ -34,15 +27,8 @@ bool Graph::AddUser(Users& user) {
     indexmapper[uid] = idx;
     users.push_back(user);
     IDtoUser[uid] = user;
-
     Followers_id.push_back({});
     Following_id.push_back({});
-    if(user.getFollowers().size()>0){
-        for(const auto f:user.getFollowers()){
-            this->AddFollower(this->users[idx],f);
-        }
-    }
-
     return true;
 }
 

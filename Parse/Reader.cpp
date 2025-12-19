@@ -1,5 +1,4 @@
 #include "Reader.hpp"
-
 using namespace std;
 
 Reader::Reader(const string& file)
@@ -21,9 +20,6 @@ string Reader::strip(string& s) {
 
     return s;
 }
-
-
-
 
 void Reader::read() {
     ifstream xml(filename);
@@ -49,7 +45,7 @@ void Reader::read() {
             inUser = true;
             currentUserId = -1;
             currentUserName.clear();
-            u=Users();
+            u = Users();
         }
 
         // -------- USER ID --------
@@ -57,6 +53,7 @@ void Reader::read() {
             getline(xml,line);
             currentUserId = stoi(strip(line));
             u.setid(currentUserId);
+            users_ids.push_back(currentUserId);
         }
 
         // -------- USER NAME --------
@@ -89,7 +86,7 @@ void Reader::read() {
         }
 
         else if (line.find("</post>") != string::npos) {
-             u.addPost(currentPost);
+            u.addPost(currentPost);
             inPost = false;
         }
 
@@ -103,13 +100,15 @@ void Reader::read() {
         }
 
         else if (line.find("<follower>") != string::npos && inFollowers) {
-            getline(xml, line);
-            getline(xml,line);
+            getline(xml , line);
+            getline(xml ,line);
              // <id>X</id>
             int followerId = stoi(strip(line));
-             u.addFollower(followerId);
+            u.addFollower(followerId);
         }
     }
 }
+
 Graph Reader::getnet(){return this->network;}
 
+vector<int> Reader::getusers(){return this->users_ids;}
