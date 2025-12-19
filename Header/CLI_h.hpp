@@ -14,8 +14,8 @@
 #include "../Graph/Graphs.hpp"
 using namespace std;
 
-void Parse_input(string action, string inputPath, string outputPath, vector<pair<char, string>> flags , Graph& network , vector<int>& users);
-void visualize(const string& outputPath, Graph& g, const vector<int>& userIds);
+void Parse_input(string action, string inputPath, string outputPath, vector<pair<char, string>> flags);
+void visualize(const string& inputPath, const string& outputPath);
 void visualizeIDsOnly(const string& outputPath, Graph& g, const vector<int>& userIds);
 
 #endif

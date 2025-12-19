@@ -1,7 +1,7 @@
 #include "../Header/CLI_h.hpp"
 #include "../Parse/Reader.hpp"
 
-void Parse_input(string action, string inputPath, string outputPath, vector<pair<char, string>> flags , Graph& network , vector<int>& users) {
+void Parse_input(string action, string inputPath, string outputPath, vector<pair<char, string>> flags) {
     if (action == "verify"){
 
     }
@@ -29,7 +29,7 @@ void Parse_input(string action, string inputPath, string outputPath, vector<pair
 
     }
     else if (action == "draw"){
-        visualize(outputPath, network , users);
+        visualize(inputPath , outputPath);
     }
     else if (action == "most_active")
     {

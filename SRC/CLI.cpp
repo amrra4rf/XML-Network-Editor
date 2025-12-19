@@ -58,11 +58,11 @@ int main(int argc, char* argv[])
         }
     }
 
-    Graph graph;
-    Reader reader(inputPath);
-    reader.read();
-    graph= reader.getnet();
-    vector<int> users = reader.getusers();
+    // Graph graph;
+    // Reader reader(inputPath);
+    // reader.read();
+    // graph= reader.getnet();
+    // vector<int> users = reader.getusers();
     
     // for testing: print user details
     // for (const auto& user : users) {
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 
     // visualize(outputPath, graph, users);
     // visualizeIDsOnly(outputPath, graph, users);
-    Parse_input(action, inputPath, outputPath, flags , graph , users);
+    Parse_input(action, inputPath, outputPath, flags);
 
     return 0;
 }

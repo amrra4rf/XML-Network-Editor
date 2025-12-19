@@ -1,8 +1,16 @@
 #include "../Header/CLI_h.hpp"
 #include <cstdlib>  
 
-void visualize(const string& outputPath, Graph& g, const vector<int>& userIds)
-{
+void visualize(const string& inputPath, const string& outputPath)
+{   
+
+    Graph g;
+    Reader reader(inputPath);
+    reader.read();
+    g = reader.getnet();
+    vector<int> userIds = reader.getusers();
+
+
     string dotPath = outputPath + "/network.dot";
     string pngPath = outputPath + "/network.png";
     
