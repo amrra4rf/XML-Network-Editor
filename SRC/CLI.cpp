@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
     string outputPath = ".";
 
     // Store optional flags with optional description
-    vector<pair<char, string>> flags;
+    vector<pair<string , string>> flags;
 
     for (int i = 2; i < argc; i++) {
         string arg = argv[i];
@@ -39,18 +39,16 @@ int main(int argc, char* argv[])
                 return 1;
             }
         }
-        // any other flag with optional description
-        else if (arg.size() == 2 && arg[0] == '-') {
-            char flag = arg[1];
-            string description = "";
+        // flags: -f, -ids, -w, etc
+        else if (arg[0] == '-') {
+            string flagName = arg.substr(1); // remove '-'
+            string value = "";
 
-            // collect all following arguments until next -<char> or end
-            while (i + 1 < argc && argv[i + 1][0] != '-') {
-                if (!description.empty()) description += " ";
-                description += argv[++i];
+            if (i + 1 < argc && argv[i + 1][0] != '-') {
+                value = argv[++i];
             }
 
-            flags.push_back({flag, description});
+            flags.push_back({flagName, value});
         }
         else {
             cerr << "Invalid option: " << arg << "\n";
@@ -58,40 +56,14 @@ int main(int argc, char* argv[])
         }
     }
 
-    // Graph graph;
-    // Reader reader(inputPath);
-    // reader.read();
-    // graph= reader.getnet();
-    // vector<int> users = reader.getusers();
-    
-    // for testing: print user details
-    // for (const auto& user : users) {
-    //     Users u = graph.getuserfromID(user);
-    //     cout << "User ID: " << u.getId() << "\n";
-    //     cout << "Name: " << u.getName() << "\n";
-    
-    //     cout << "Followers: ";
-    //     for (int fid : u.getFollowers())
-    //         cout << fid << " ";
-    //     cout << "\n";
-    
-    //     cout << "Posts:\n";
-    //     for (const auto& p : u.getPosts()) {
-    //         string body = p.getcontent();
-    //         if (body.size() > 60)
-    //             body = body.substr(0, 60) + "...";
-    //         cout << "  - " << body << "\n";
-    
-    //         cout << "    Topics: ";
-    //         for (const auto& t : p.gettopics())
-    //             cout << t << " ";
-    //         cout << "\n";
-    //     }
-    //     cout << "------------------------\n";
+    // cout << "action: " << action << endl;
+    // cout << "inputPath: " << inputPath << endl;
+    // cout << "outputPath: " << outputPath << endl;
+    // cout << "flags: " << endl;
+    // for (const auto& flag : flags) {
+    //     cout << "first flag: " << flag.first << " second: " << flag.second << endl;
     // }
 
-    // visualize(outputPath, graph, users);
-    // visualizeIDsOnly(outputPath, graph, users);
     Parse_input(action, inputPath, outputPath, flags);
 
     return 0;

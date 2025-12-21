@@ -8,17 +8,16 @@
 
 class Reader {
 private:
-    std::string filename;
+    string filename;
     Graph network;
     vector<int> users_ids;
 
-    std::string extractValue(const std::string& line);
-    string strip(string&s);
+    string strip(string& s);
 
 public:
-    Reader(const std::string& file);
-    void read();
-    Graph getnet();
+    Reader(const string& file);
+    void read(PostsBuilder& builder);
+    Graph& getnet();
     vector<int> getusers();
 };
 

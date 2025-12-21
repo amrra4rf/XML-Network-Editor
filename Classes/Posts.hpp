@@ -8,15 +8,9 @@ using namespace std;
 Posts.hpp
 
 Purpose:
-- Defines the Posts class representing a social media post.
+- Represents a social media post.
 - Each post has content, topics (tags), and a unique ID.
-- Uses a builder pattern: only PostsBuilder can create Posts.
-- Ensures post IDs are unique across all Posts objects.
-
-Key Features:
-- content: string storing the text of the post
-- topics: unordered_set<string> storing unique tags/topics
-- id: integer, unique identifier for each post
+- Only PostsBuilder can create Posts.
 */
 
 class Posts {
@@ -25,8 +19,12 @@ private:
     unordered_set<string> topics;
     int id;
 
-    // Private constructor: only PostsBuilder can create Posts
-    Posts(const string& s, const initializer_list<string>& heads, int x);
+    // Private constructor: only PostsBuilder can call
+    Posts(int id, const string& content, const vector<string>& topicsVec)
+        : content(content), id(id) {
+        for (const auto& t : topicsVec)
+            topics.insert(t);
+    }
 
 public:
     friend class PostsBuilder;
@@ -34,23 +32,33 @@ public:
     Posts() = default;
 
     // Getters
-    string getcontent() const;
-    const unordered_set<string>& gettopics() const;
-    int getid() const;
+    string getcontent() const { return content; }
+    const unordered_set<string>& gettopics() const { return topics; }
+    int getid() const { return id; }
 
     // Modifiers
-    void setBody(const string& s);
-    bool addTopic(const string& s);
+    void setBody(const string& s) { content = s; }
+    bool addTopic(const string& s) { return topics.insert(s).second; }
 };
 
 class PostsBuilder {
 private:
-    static unordered_set<int> uniqueids;  // declaration only
+    unordered_set<int> usedIds;  // IDs used by this builder
+    int nextId = 1;
 
 public:
-    Posts CreatePost(const string& s,
-                     const initializer_list<string>& heads,
-                     int x);
+    void reset() {
+        usedIds.clear();
+        nextId = 1;
+    }
+
+    // Create a post with automatic ID assignment
+    Posts CreatePost(const string& content, const vector<string>& topics) {
+        while (usedIds.count(nextId)) nextId++;
+        int id = nextId;
+        usedIds.insert(id);
+        return Posts(id, content, topics);
+    }
 };
 
 #endif // POSTS_HPP
