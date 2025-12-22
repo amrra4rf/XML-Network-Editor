@@ -1,0 +1,14 @@
+digraph SocialNetworkIDs {
+    rankdir=LR;
+    node [shape=ellipse, style=filled, fillcolor=lightblue, fontname="Arial"];
+    edge [fontname="Arial"];
+
+    user_1 [label="ID: 1"];
+    user_2 [label="ID: 2"];
+    user_3 [label="ID: 3"];
+
+    user_2 -> user_1 [label="follows"];
+    user_3 -> user_1 [label="follows"];
+    user_1 -> user_2 [label="follows"];
+    user_1 -> user_3 [label="follows"];
+}

@@ -1,0 +1,38 @@
+digraph SocialNetwork {
+    rankdir=LR;
+    node [fontname="Arial"];
+    edge [fontname="Arial"];
+
+    // Users
+    node [shape=ellipse, style=filled, fillcolor=lightblue];
+    user_1 [label="Ahmed Ali\n(ID: 1)"];
+    user_2 [label="Yasser Ahmed\n(ID: 2)"];
+    user_3 [label="Mohamed Sherif\n(ID: 3)"];
+
+    // Followers (directed)
+    user_2 -> user_1 [label="follows"];
+    user_3 -> user_1 [label="follows"];
+    user_1 -> user_2 [label="follows"];
+    user_1 -> user_3 [label="follows"];
+
+    // Posts
+    node [shape=box, style=filled, fillcolor=lightyellow];
+    post_0 [label="Post\nLorem ipsum dolor sit amet, consectetur adipiscing elit,"];
+    user_1 -> post_0 [label="writes"];
+    post_0_topic_finance [label="finance", shape=note, style=filled, fillcolor=lightgreen];
+    post_0 -> post_0_topic_finance [label="has"];
+    post_0_topic_economy [label="economy", shape=note, style=filled, fillcolor=lightgreen];
+    post_0 -> post_0_topic_economy [label="has"];
+    post_1 [label="Post\nLorem ipsum dolor sit amet, consectetur adipiscing elit."];
+    user_1 -> post_1 [label="writes"];
+    post_1_topic_solar_energy [label="solar_energy", shape=note, style=filled, fillcolor=lightgreen];
+    post_1 -> post_1_topic_solar_energy [label="has"];
+    post_2 [label="Post\nLorem ipsum dolor sit amet."];
+    user_2 -> post_2 [label="writes"];
+    post_2_topic_education [label="education", shape=note, style=filled, fillcolor=lightgreen];
+    post_2 -> post_2_topic_education [label="has"];
+    post_3 [label="Post\nLorem ipsum dolor sit amet."];
+    user_3 -> post_3 [label="writes"];
+    post_3_topic_sports [label="sports", shape=note, style=filled, fillcolor=lightgreen];
+    post_3 -> post_3_topic_sports [label="has"];
+}
