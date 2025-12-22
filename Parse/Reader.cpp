@@ -4,111 +4,85 @@ using namespace std;
 Reader::Reader(const string& file)
     : filename(file) {}
 
-string Reader::extractValue(const string& line) {
-    size_t start = line.find('>') + 1;
-    size_t end = line.rfind('<');
-    return line.substr(start, end - start);
-}
-
 string Reader::strip(string& s) {
-    while (!s.empty() && s.back() == ' ')
+    while (!s.empty() && isspace(s.back()))
         s.pop_back();
-
-
-    while (!s.empty() && s.front() == ' ')
+    while (!s.empty() && isspace(s.front()))
         s.erase(s.begin());
-
     return s;
 }
 
-void Reader::read() {
+void Reader::read(PostsBuilder& builder) {
     ifstream xml(filename);
     if (!xml.is_open())
         throw runtime_error("Cannot open XML file");
 
+    users_ids.clear();
+
     string line;
-
-    int currentUserId = -1;
-    string currentUserName;
-
     bool inUser = false;
     bool inFollowers = false;
     bool inPost = false;
 
-    Posts currentPost;
     Users u;
+    Posts currentPost;
 
     while (getline(xml, line)) {
 
-        // -------- USER START --------
         if (line.find("<user>") != string::npos) {
             inUser = true;
-            currentUserId = -1;
-            currentUserName.clear();
             u = Users();
         }
-
-        // -------- USER ID --------
         else if (line.find("<id>") != string::npos && inUser && !inFollowers) {
-            getline(xml,line);
-            currentUserId = stoi(strip(line));
-            u.setid(currentUserId);
-            users_ids.push_back(currentUserId);
+            getline(xml, line);
+            int uid = stoi(strip(line));
+            u.setid(uid);
+            users_ids.push_back(uid);
         }
-
-        // -------- USER NAME --------
-        else if (line.find("<name>") != string::npos) {
-            getline(xml,line);
-            currentUserName = strip(line);
-            u.setname(currentUserName);
-        }
-
-        // -------- USER END --------
-        else if (line.find("</user>") != string::npos) {
+        else if (line.find("<name>") != string::npos && inUser) {
+            getline(xml, line);
+            u.setname(strip(line));
             network.AddUser(u);
-            inUser = false;
         }
-
-        // -------- POSTS --------
         else if (line.find("<post>") != string::npos) {
             inPost = true;
-            currentPost = Posts();
+            currentPost = Posts(); // reset current post
         }
-
         else if (line.find("<body>") != string::npos && inPost) {
-            getline(xml,line);
+            getline(xml, line);
             currentPost.setBody(strip(line));
         }
-
         else if (line.find("<topic>") != string::npos && inPost) {
-            getline(xml,line);
-            currentPost.addTopic(strip(line));
+            getline(xml, line);
+            string topic = strip(line);
+            transform(topic.begin(), topic.end(), topic.begin(), ::tolower);
+            currentPost.addTopic(topic);
         }
-
-        else if (line.find("</post>") != string::npos) {
-            u.addPost(currentPost);
+        else if (line.find("</post>") != string::npos && inPost) {
+            // create post via builder
+           currentPost = builder.CreatePost(currentPost.getcontent(), 
+                                 vector<string>(currentPost.gettopics().begin(), currentPost.gettopics().end()));
+            network.AddPost(currentPost, u);
             inPost = false;
         }
-
-        // -------- FOLLOWERS --------
         else if (line.find("<followers>") != string::npos) {
             inFollowers = true;
         }
-
         else if (line.find("</followers>") != string::npos) {
             inFollowers = false;
         }
-
         else if (line.find("<follower>") != string::npos && inFollowers) {
-            getline(xml , line);
-            getline(xml ,line);
-             // <id>X</id>
+            getline(xml, line); // skip <id>
+            getline(xml, line); // actual id
             int followerId = stoi(strip(line));
-            u.addFollower(followerId);
+            network.AddFollower(u, followerId);
+        }
+        else if (line.find("</user>") != string::npos) {
+            inUser = false;
         }
     }
 }
 
-Graph Reader::getnet(){return this->network;}
+Graph& Reader::getnet() { return network; }
 
-vector<int> Reader::getusers(){return this->users_ids;}
+vector<int> Reader::getusers() { return users_ids; }

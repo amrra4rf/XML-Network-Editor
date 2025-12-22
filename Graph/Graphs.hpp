@@ -41,17 +41,19 @@
 #define GRAPH_HPP
 
 #include <bits/stdc++.h>
-#include "../Classes/Posts.hpp"
-#include "../Classes/User.hpp"
+#include "./Posts.hpp"
+#include "./User.hpp"
 
 class Graph {
 private:
     std::vector<Users> users;
     std::unordered_map<int, Users> IDtoUser;
     std::unordered_map<int, int> indexmapper;
-
     std::vector<std::vector<int>> Followers_id;
     std::vector<std::vector<int>> Following_id;
+
+    // Topic index for fast post search
+    std::unordered_map<std::string, std::vector<Posts*>> topicIndex;
 
     UsersBuilder ubuild;
 
@@ -59,10 +61,11 @@ private:
 
 public:
     Graph() = default;
-    Graph(UsersBuilder& ubuild2);
+    Graph(UsersBuilder& ubuild2) : ubuild(ubuild2) {ubuild.reset();}
 
+    // ---------- User Management ----------
     bool AddUser(Users& user);
-    bool AddUser(std::string& name, int id);
+    bool AddUser(const std::string& name, int id);
 
     void CheckExistance(const Users& user) const;
 
@@ -71,13 +74,28 @@ public:
 
     void AddPost(Posts& p, Users& writer);
 
-    Users getuserfromID(int id);
+    // Return reference to allow modifying posts
+    Users& getUserFromID(int id);
 
-    std::vector<int> GetFollowers(Users& user);
-    std::vector<int> GetFollowers(int& userid);
+    // ---------- Query Followers / Following ----------
+    std::vector<int> GetFollowers(const Users& user);
+    std::vector<int> GetFollowers(int userid);
 
-    std::vector<int> Getfollowing(Users& user);
-    std::vector<int> FetDollowing(int& userid);
+    std::vector<int> GetFollowing(const Users& user);
+    std::vector<int> GetFollowing(int userid);
+
+    // ---------- Getters for external access ----------
+    std::vector<Users>& getUsers() { return users; }
+    const std::vector<Users>& getUsers() const { return users; }
+
+    std::unordered_map<int, Users>& getIDtoUser() { return IDtoUser; }
+    const std::unordered_map<int, Users>& getIDtoUser() const { return IDtoUser; }
+
+    std::unordered_map<std::string, std::vector<Posts*>>& getTopicIndex() { return topicIndex; }
+    const std::unordered_map<std::string, std::vector<Posts*>>& getTopicIndex() const { return topicIndex; }
+
+    // ---------- Utility ----------
+    bool isFollowing(int userId, int targetId) const;
 };
 
 #endif

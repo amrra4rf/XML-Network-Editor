@@ -2,45 +2,40 @@
 
 using namespace std;
 
-Graph::Graph(UsersBuilder& ubuild2) : ubuild(ubuild2) {}
-
 int Graph::getNodeIndex(int uid) const {
     auto it = indexmapper.find(uid);
-    if (it == indexmapper.end()) {
-        throw runtime_error("User id not found in indexmapper: " + to_string(uid));
-    }
+    if (it == indexmapper.end())
+        throw runtime_error("User id not found: " + to_string(uid));
     return it->second;
 }
 
 bool Graph::AddUser(Users& user) {
     int uid = user.getId();
-
-    auto it = IDtoUser.find(uid);
-    if (it != IDtoUser.end()) {
-        it->second = user;  // overwrite existing user entirely
+    if (IDtoUser.count(uid)) {
         int idx = indexmapper[uid];
         users[idx] = user;
+        IDtoUser[uid] = user;
         return false;
     }
 
     int idx = users.size();
-    indexmapper[uid] = idx;
     users.push_back(user);
     IDtoUser[uid] = user;
+    indexmapper[uid] = idx;
+
     Followers_id.push_back({});
     Following_id.push_back({});
     return true;
 }
 
-bool Graph::AddUser(string& name, int id) {
+bool Graph::AddUser(const std::string& name, int id) {
     Users u = ubuild.CreateUser(name, id);
-    return this->AddUser(u);
+    return AddUser(u);
 }
 
 void Graph::CheckExistance(const Users& user) const {
-    if (IDtoUser.count(user.getId()) == 0) {
-        throw runtime_error("Add User first");
-    }
+    if (!IDtoUser.count(user.getId()))
+        throw runtime_error("User does not exist");
 }
 
 bool Graph::AddFollower(Users& tofollow, int followerid) {
@@ -48,41 +43,40 @@ bool Graph::AddFollower(Users& tofollow, int followerid) {
     int idx = getNodeIndex(tofollow.getId());
     Followers_id[idx].push_back(followerid);
 
-    if (indexmapper.find(followerid) != indexmapper.end()) {
+    if (indexmapper.count(followerid)) {
         int fidx = indexmapper.at(followerid);
         Following_id[fidx].push_back(tofollow.getId());
         return true;
     }
 
-    Users u = ubuild.CreateUser("Add Name to user", followerid);
+    Users u = ubuild.CreateUser("Unknown", followerid);
     int newIdx = users.size();
-    indexmapper[followerid] = newIdx;
     users.push_back(u);
     IDtoUser[followerid] = u;
+    indexmapper[followerid] = newIdx;
 
     Followers_id.push_back({});
     Following_id.push_back({});
-
     Following_id[newIdx].push_back(tofollow.getId());
     return false;
 }
 
 bool Graph::AddFollow(Users& follower, int tofollowid) {
     CheckExistance(follower);
-    int followeridx = getNodeIndex(follower.getId());
-    Following_id[followeridx].push_back(tofollowid);
+    int followerIdx = getNodeIndex(follower.getId());
+    Following_id[followerIdx].push_back(tofollowid);
 
-    if (indexmapper.find(tofollowid) != indexmapper.end()) {
+    if (indexmapper.count(tofollowid)) {
         int tidx = indexmapper.at(tofollowid);
         Followers_id[tidx].push_back(follower.getId());
         return true;
     }
 
-    Users u = ubuild.CreateUser("Add Name to user", tofollowid);
+    Users u = ubuild.CreateUser("Unknown", tofollowid);
     int newIdx = users.size();
-    indexmapper[tofollowid] = newIdx;
     users.push_back(u);
     IDtoUser[tofollowid] = u;
+    indexmapper[tofollowid] = newIdx;
 
     Followers_id.push_back({});
     Following_id.push_back({});
@@ -92,30 +86,50 @@ bool Graph::AddFollow(Users& follower, int tofollowid) {
 
 void Graph::AddPost(Posts& p, Users& writer) {
     CheckExistance(writer);
-    int idx = indexmapper[writer.getId()];
+    int idx = getNodeIndex(writer.getId());
     users[idx].addPost(p);
+
+    // Add to topic index
+    for (const string& t : p.gettopics()) {
+        string lowerTopic = t;
+        // Trim whitespace
+        lowerTopic.erase(lowerTopic.begin(), find_if(lowerTopic.begin(), lowerTopic.end(), [](unsigned char ch){ return !isspace(ch); }));
+        lowerTopic.erase(find_if(lowerTopic.rbegin(), lowerTopic.rend(), [](unsigned char ch){ return !isspace(ch); }).base(), lowerTopic.end());
+        // Lowercase
+        transform(lowerTopic.begin(), lowerTopic.end(), lowerTopic.begin(), ::tolower);
+        // Push post pointer
+        topicIndex[lowerTopic].push_back(&users[idx].getPosts().back());
+    }
 }
 
-vector<int> Graph::GetFollowers(Users& user) {
+vector<int> Graph::GetFollowers(const Users& user) {
     CheckExistance(user);
-    int idx = indexmapper[user.getId()];
-    return Followers_id.at(idx);
+    int idx = getNodeIndex(user.getId());
+    return Followers_id[idx];
 }
 
-vector<int> Graph::GetFollowers(int& userid) {
-    return this->GetFollowers(IDtoUser[userid]);
+vector<int> Graph::GetFollowers(int userid) {
+    return GetFollowers(IDtoUser.at(userid));
 }
 
-vector<int> Graph::Getfollowing(Users& user) {
+vector<int> Graph::GetFollowing(const Users& user) {
     CheckExistance(user);
-    int idx = indexmapper[user.getId()];
-    return Following_id.at(idx);
+    int idx = getNodeIndex(user.getId());
+    return Following_id[idx];
 }
 
-vector<int> Graph::FetDollowing(int& userid) {
-    return this->Getfollowing(IDtoUser[userid]);
+vector<int> Graph::GetFollowing(int userid) {
+    return GetFollowing(IDtoUser.at(userid));
 }
 
-Users Graph::getuserfromID(int id){
-    return IDtoUser[id];
+// Return reference instead of copy
+Users& Graph::getUserFromID(int id) {
+    return IDtoUser.at(id);
+}
+
+bool Graph::isFollowing(int userId, int targetId) const {
+    if (!indexmapper.count(userId)) return false;
+    int idx = indexmapper.at(userId);
+    const auto& following = Following_id[idx];
+    return std::find(following.begin(), following.end(), targetId) != following.end();
 }
