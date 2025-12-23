@@ -116,8 +116,9 @@ XML-Network-Editor/
 ---
 
 ### 🎓 Submitted to
-**Prof. Islam Elmadah**
+**Prof. Islam Elmadah**,
 **Eng.Fady Fargallah**
+
 📘 *Course: Data Structures & Algorithms*
 
 ---
