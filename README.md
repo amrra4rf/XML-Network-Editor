@@ -44,6 +44,7 @@ It constructs a **Social Network Graph** to perform analytics (such as finding t
 
 ---
 ## 🗂️ Project Structure
+```
 XML-Network-Editor/
 │
 ├── GUI/
