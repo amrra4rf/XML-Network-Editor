@@ -43,7 +43,60 @@ It constructs a **Social Network Graph** to perform analytics (such as finding t
 - 🔍 **Search:** Search posts by **Word** or **Topic** using efficient parsing  
 
 ---
+## 🗂️ Project Structure
+XML-Network-Editor/
+│
+├── GUI/
+│   ├── main.cpp
+│   ├── mainwindow.cpp
+│   ├── mainwindow.h
+│   ├── mainwindow.ui
+│   ├── fileviewer.cpp
+│   ├── fileviewer.h
+│   └── fileviewer.ui
+│
+├── Includes/
+│   ├── CLI_h.hpp
+│   ├── Formater.hpp
+│   ├── Graphs.hpp
+│   ├── Posts.hpp
+│   ├── Reader.hpp
+│   ├── SocialNetwork.hpp
+│   ├── User.hpp
+│   └── visualize.hpp
+│
+├── source/
+│   ├── Cli/
+│   │   ├── CLI.cpp
+│   │   └── CLI_inputParser.cpp
+│   │
+│   ├── Data structures/
+│   │   ├── Graphs.cpp
+│   │   ├── Posts.cpp
+│   │   └── User.cpp
+│   │
+│   └── Services/
+│       ├── compress.cpp
+│       ├── decompress.cpp
+│       ├── JsonConverter.cpp
+│       ├── Prettifyer.cpp
+│       ├── Reader.cpp
+│       ├── SocialNetwork.cpp
+│       ├── vaild.cpp
+│       ├── visualize.cpp
+│       └── XML_Minifying.cpp
+│
+├── input/
+│   └── data.xml
+│
+├── output/
+    ├── network.dot
+    ├── network.png
+    ├── minified.xml
+    └── compressed.comp
 
+
+---
 ## 👥 Team Members
 
 | Name | ID | Role |
