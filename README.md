@@ -50,7 +50,7 @@ It constructs a **Social Network Graph** to perform analytics (such as finding t
 | :--- | :--- | :--- |
 | **Amr Ashraf Hussien** | [2201048] | 🎨 Social Network Part1 & Gui  |
 | **Eyad Tarek Nagy** | [2200512] | 🧠 Xml Pretfier |
-| **Youssef Ahmed Mohammed** | [2200405] | 📄Graph Architect |
+| **Youssef Ahmed Mohammed** | [2200405] | 📄Graph Architect & Parse XML |
 | **Mohammed Hamada Hassan** | [2200820] | ⚙️ SocialNetwork Part 2 & Report |
 | **Abdullah Mohammed Ahmed** | [2200423] | 🎨 GUI & Integration |
 | **Mohammed Walid Abd Elmohsen** | [2200243] | 🧠 Xml To Json Converter |
