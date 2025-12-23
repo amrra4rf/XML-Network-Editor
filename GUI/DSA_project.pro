@@ -4,18 +4,29 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+INCLUDEPATH += "$$PWD/source"
+
+INCLUDEPATH += "../Includes"
 
 SOURCES += \
-    fileviewer.cpp \
+fileviewer.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ../Services/visualize.cpp \
+    ../Services/Reader.cpp \
+    "../Data structures/Posts.cpp" \
+    "../Data structures/User.cpp" \
+    "../Data structures/Graphs.cpp"
 
 HEADERS += \
-    fileviewer.h \
-    mainwindow.h
+fileviewer.h \
+mainwindow.h\
+    ../Includes/Reader.hpp \
+    ../Includes/Posts.hpp \
+    ../Includes/User.hpp \
+    ../Includes/Graphs.hpp \
+    ../Includes/visualize.hpp
 
 FORMS += \
     fileviewer.ui \

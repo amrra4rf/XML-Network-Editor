@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FileViewer</class>
+ <widget class="QWidget" name="FileViewer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1676</width>
+    <height>984</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1681</width>
+     <height>681</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="vaild">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Vaild</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="format">
+   <property name="geometry">
+    <rect>
+     <x>115</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Format</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="compress">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Comperss</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="decompress">
+   <property name="geometry">
+    <rect>
+     <x>345</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Decomperss</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="convert">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Convert</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="minify">
+   <property name="geometry">
+    <rect>
+     <x>575</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Minify</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="represent">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Represent</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="influencer">
+   <property name="geometry">
+    <rect>
+     <x>920</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Influencer</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="mutual">
+   <property name="geometry">
+    <rect>
+     <x>1035</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Mutual</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="mostactive">
+   <property name="geometry">
+    <rect>
+     <x>805</x>
+     <y>700</y>
+     <width>90</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Most Active</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="word">
+   <property name="geometry">
+    <rect>
+     <x>1290</x>
+     <y>700</y>
+     <width>111</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Search by word</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="topic">
+   <property name="geometry">
+    <rect>
+     <x>1420</x>
+     <y>700</y>
+     <width>111</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Search by topic</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="suggested">
+   <property name="geometry">
+    <rect>
+     <x>1150</x>
+     <y>700</y>
+     <width>120</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>suggested users</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

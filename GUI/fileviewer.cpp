@@ -1,9 +1,15 @@
 #include "fileviewer.h"
-#include "compress.h"
-#include "decompress.h"
-#include "format.h"
-#include "convert.h"
-#include"XML_Minifying.h"
+#include "../../Includes/Formater.hpp"
+#include "../Services/compress.cpp"
+#include "../Services/decompress.cpp"
+#include "../Services/JsonConverter.cpp"
+#include "../Services/Prettifyer.cpp"
+#include "../Services/visualize.cpp"
+#include "../Services/SocialNetwork.cpp"
+//#include "format.h"
+//#include "convert.h"
+#include "../Services/vaild.cpp"
+#include "../Services/XML_Minifying.cpp"
 #include "ui_fileviewer.h"
 #include <QFile>
 #include <QTextStream>
@@ -12,9 +18,14 @@
 #include <QFileDialog>
 #include <fstream>
 #include <string>
-#include"vaild.h"
-#include"vis.h"
-#include"SocialNetworkGraphTemp.h"
+//#include"vaild.h"
+#include"../../Includes/Reader.hpp"
+#include"../../Includes/User.hpp"
+#include"../../Includes/Graphs.hpp"
+#include"../../Includes/Posts.hpp"
+#include"../../Includes/CLI_h.hpp"
+#include"../../Includes/visualize.hpp"
+#include"../../Includes\SocialNetwork.hpp"
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QLineEdit>
@@ -98,7 +109,7 @@ void FileViewer::on_minify_clicked()
     }
 
     // Set output file path to project folder: "file.xml"
-    QString outFileName = QDir::currentPath() + "/minified.xml";
+    QString outFileName =QDir::cleanPath(QDir::currentPath() + "/../../../../output")+ "/minified.xml";
 
     // Call your existing minifying function
     minifying(m_filePath.toStdString(), outFileName.toStdString());
@@ -117,7 +128,7 @@ void FileViewer::on_compress_clicked()
     }
 
     // Set output file path to project folder: "file.xml"
-    QString outFileName = QDir::currentPath() + "/compressed.comp";
+    QString outFileName =QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/compressed.comp";
 
     // Call your existing minifying function
     compress(m_filePath.toStdString(), outFileName.toStdString());
@@ -130,11 +141,11 @@ void FileViewer::on_compress_clicked()
 void FileViewer::on_decompress_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-    tr("Open File"),       // Dialog title
-    QDir::homePath(),      // Default directory
-    tr("All Files (*.*);;Text Files (*.txt)") // Filter
-    );
-    QString outFileName = QDir::currentPath() + "/decompressed.xml";
+                                                    tr("Open File"),       // Dialog title
+                                                    QDir::homePath(),      // Default directory
+                                                    tr("All Files (*.*);;Text Files (*.txt)") // Filter
+                                                    );
+    QString outFileName = QDir::cleanPath(QDir::currentPath() + "/../../../../output")+ "/decompressed.xml";
 
 
     if (!fileName.isEmpty()) {
@@ -156,7 +167,7 @@ void FileViewer::on_format_clicked()
     }
 
     // Set output file path to project folder: "file.xml"
-    QString outFileName = QDir::currentPath() + "/formated.xml";
+    QString outFileName = QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/formated.xml";
 
     // Call your existing minifying function
     Format_XML_File(m_filePath.toStdString(), outFileName.toStdString());
@@ -173,10 +184,9 @@ void FileViewer::on_convert_clicked()
     }
 
     // Set output file path to project folder: "file.xml"
-    QString outFileName = QDir::currentPath() + "/converted.json";
+    QString outFileName = QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/xmlToJson.json";
 
-    // Call your existing minifying function
-    convert(m_filePath.toStdString());
+    convert(m_filePath.toStdString(),outFileName.toStdString());
 
     QMessageBox::information(this, "Success", "converted file created at: " + outFileName);
 }
@@ -226,7 +236,7 @@ void FileViewer::on_vaild_clicked()
             std::string fixedXml = fixXml(xmlContent, errorLines);
 
             // Save as a new file "fixed.xml" in the current project directory
-            QString fixedFilePath = QDir::currentPath() + "/fixed.xml";
+            QString fixedFilePath = QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/fixed.xml";
             std::ofstream outFile(fixedFilePath.toStdString());
             if (outFile.is_open()) {
                 outFile << fixedXml;
@@ -267,7 +277,7 @@ void FileViewer::on_represent_clicked()
         formattedFile.toStdString()
         );
 
-    QString outputDir = QDir::currentPath() + "/representation";
+    QString outputDir = QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/representation";
     QDir dir(outputDir);
     if (!dir.exists()) {
         dir.mkpath(".");

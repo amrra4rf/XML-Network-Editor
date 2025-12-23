@@ -1,0 +1,10 @@
+release/fileviewer.o
+release/main.o
+release/mainwindow.o
+release/visualize.o
+release/Reader.o
+release/Posts.o
+release/User.o
+release/Graphs.o
+release/moc_fileviewer.o
+release/moc_mainwindow.o

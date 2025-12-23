@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a0b3ae87-a4ff-4480-98b3-7fdccd4d140f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../Headers/Graph.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Headers/SocialNetworkGraph.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Headers/SocialNetworkGraph.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Graph.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Posts.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Posts.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SocialNetworkGraph.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SocialNetworkGraph.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/User.cpp" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="PdrYIB5n" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="375bdR8m9CORz4EQMHeb6OJsAu5" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "XML__SIZE__CHANGER",
+    "last_opened_file_path": "F:/college/Github/XML-Network-Editor 2/Src",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.first.attach.projects": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a0b3ae87-a4ff-4480-98b3-7fdccd4d140f" name="Changes" comment="" />
+      <created>1766195966682</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1766195966682</updated>
+      <workItem from="1766195968890" duration="47000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -1,0 +1,10 @@
+debug/fileviewer.o
+debug/main.o
+debug/mainwindow.o
+debug/visualize.o
+debug/Reader.o
+debug/Posts.o
+debug/User.o
+debug/Graphs.o
+debug/moc_fileviewer.o
+debug/moc_mainwindow.o
