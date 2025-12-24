@@ -18,31 +18,39 @@ It constructs a **Social Network Graph** to perform analytics (such as finding t
 ## ✨ Key Features
 
 ### 🧩 1. XML Utilities
-- ✅ **Validation:** Checks XML consistency (balanced tags) and detects errors  
-- 🛠️ **Error Correction:** Automatically attempts to fix invalid XML syntax  
-- 🎨 **Formatting:**  
-  - Minified XML ➝ Prettified (indented)  
-  - Prettified XML ➝ Minified (single-line)  
-- 🔄 **Conversion:** Converts XML data to **JSON** format  
+- ✅ **Validation:** Checks XML consistency (balanced tags) and detects errors
+- 🛠️ **Error Correction:** Automatically attempts to fix invalid XML syntax
+- 🎨 **Formatting:**
+  - Minified XML ➝ Prettified (indented)
+  - Prettified XML ➝ Minified (single-line)
 
----
+- 🔄 **Conversion:** Converts XML data to **JSON** format
 
 ### 📦 2. Data Compression
-- 🗜️ **Compress:** Reduces file size using custom binary compression (`.comp` files)  
-- 📤 **Decompress:** Restores original XML files from compressed data  
-
----
+- 🗜️ **Compress:** Reduces file size using custom binary compression (`.comp` files)
+- 📤 **Decompress:** Restores original XML files from compressed data
 
 ### 🧠 3. Social Network Analysis (Graph Algorithms)
-- 🖼️ **Network Visualization:** Generates graphical representations using **Graphviz** (`.png` output)  
-- ⭐ **Influencer Analysis:**  
-  - Most Active User  
-  - Most Influential User (based on graph connectivity)  
-- 🤝 **Suggestions:** Recommends new users to follow  
-- 🔗 **Mutual Followers:** Finds shared connections between users  
-- 🔍 **Search:** Search posts by **Word** or **Topic** using efficient parsing  
+- 🖼️ **Network Visualization:** Generates graphical representations using **Graphviz** (`.png` output)
+- ⭐ **Influencer Analysis:** - Most Active User
+  - Most Influential User (based on graph connectivity)
+- 🤝 **Suggestions:** Recommends new users to follow
+- 🔗 **Mutual Followers:** Finds shared connections between users
+- 🔍 **Search:** Search posts by **word** or **topic** using efficient parsing
 
 ---
+
+## 📥 Installation (Quick Start)
+
+You do **not** need to install Qt or compile the code to run this application.
+
+1. **Download:** Go to the [Releases](../../releases) page and download `Xml_Network_Editor.zip`.
+2. **Extract:** Unzip the entire folder to a location of your choice.
+3. **Graphviz:** Ensure [Graphviz](https://graphviz.org/download/) is installed and added to your **System PATH** (required for graph visualization).
+4. **Run:** Open `DSA_project.exe` to start the GUI.
+
+---
+
 ## 🗂️ Project Structure
 ```
 XML-Network-Editor/
@@ -83,7 +91,7 @@ XML-Network-Editor/
 │       ├── Prettifyer.cpp
 │       ├── Reader.cpp
 │       ├── SocialNetwork.cpp
-│       ├── vaild.cpp
+│       ├── valid.cpp
 │       ├── visualize.cpp
 │       └── XML_Minifying.cpp
 │
@@ -102,16 +110,16 @@ XML-Network-Editor/
 
 | Name | ID | Role |
 | :--- | :--- | :--- |
-| **Amr Ashraf Hussien** | [2201048] | 🎨 Social Network Part1 & Gui  |
-| **Eyad Tarek Nagy** | [2200512] | 🧠 Xml Pretfier |
-| **Youssef Ahmed Mohammed** | [2200405] | 📄Graph Architect & Parse XML |
-| **Mohammed Hamada Hassan** | [2200820] | ⚙️ SocialNetwork Part 2 & Report |
-| **Abdullah Mohammed Ahmed** | [2200423] | 🎨 GUI & Integration |
-| **Mohammed Walid Abd Elmohsen** | [2200243] | 🧠 Xml To Json Converter |
-| **Mahmoud Shabaan Mohammed** | [2200676] | 📄 XML Minfier & Compressor & Decompressor |
-| **Seif Mohammed Hassan** | [2200929] | ⚙️ CLI Implementation |
-| **Mohammed Ehab Mohammed** | [2201067] | 🧠 Xml Validator  |
-| **Ahmed Mahmoud El morsy** | [2200725] | 📄 Report |
+| **Amr Ashraf Hussien** | 2201048 | 🎨 Social Network Part1 & Gui  |
+| **Eyad Tarek Nagy** | 2200512 | 🧠 Xml Prettifier |
+| **Youssef Ahmed Mohammed** | 2200405 | 📄Graph Architect & Parse XML |
+| **Mohammed Hamada Hassan** | 2200820 | ⚙️ SocialNetwork Part 2 & Report |
+| **Abdullah Mohammed Ahmed** | 2200423 | 🎨 GUI & Integration |
+| **Mohammed Walid Abd Elmohsen** | 2200243 | 🧠 XML to JSON Converter |
+| **Mahmoud Shabaan Mohammed** | 2200676 | 📄 XML Minifier & Compressor & Decompressor |
+| **Seif Mohammed Hassan** | 2200929 | ⚙️ CLI Implementation & Graph Visualization |
+| **Mohammed Ehab Mohammed** | 2201067 | 🧠 Xml Validator  |
+| **Ahmed Mahmoud El morsy** | 2200725 | 📄 Report |
 
 ---
 
