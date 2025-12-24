@@ -1,16 +1,17 @@
 #include "../../Includes/Formater.hpp"
- 
+
 map<string, int> pairCount;
 map<char, bool> charexist;
 map<char, string> dictionary_token;
 map<string, char> dictionary_pair;
 vector<char> unusedChar;
- 
+
     struct Pair
     {
         string pairName;
         int pairCount;
     };
+    
     struct Compare
     {
         bool operator()(Pair a, Pair b)
@@ -19,8 +20,10 @@ vector<char> unusedChar;
         }
     };
     priority_queue<Pair, vector<Pair>, Compare> pq;
+    
     void initMaps(string &data_sequence)
     {
+    
         for (int i = 33; i < 255; i++)
             charexist[i] = false;
         for (int i = 0; i < data_sequence.size() - 1; i++)
@@ -46,12 +49,14 @@ vector<char> unusedChar;
             if (!b)
                 unusedChar.push_back(c);
     }
+    
     void update_pair_counts_and_pq(const std::string &data_sequence)
     {
         // Clear previous counts and queue
         pairCount.clear();
         while (!pq.empty())
             pq.pop();
+    
         // Count all adjacent pairs in the new sequence
         for (int i = 0; i < data_sequence.size() - 1; i++)
         {
@@ -60,6 +65,7 @@ vector<char> unusedChar;
             tmp += data_sequence[i + 1];
             pairCount[tmp]++;
         }
+    
         for (auto &[pair, count] : pairCount)
         {
             if (count > 1)
@@ -71,6 +77,7 @@ vector<char> unusedChar;
             }
         }
     }
+    
     void merge_and_update_sequence(string &sequence, const std::string &oldPair, char newToken)
     {
         size_t pos = 0;
@@ -80,6 +87,7 @@ vector<char> unusedChar;
             pos += 1; 
         }
     }
+    
     void compress(string inputfileName, string outFileName)
     {
         ifstream inputfile(inputfileName);
@@ -96,24 +104,30 @@ vector<char> unusedChar;
         }
         string data_sequence((istreambuf_iterator<char>(inputfile)), istreambuf_iterator<char>());
         initMaps(data_sequence);
+    
         while (true)
         {
             if (pq.empty())
                 break;
+    
             Pair current_max_pair = pq.top();
             pq.pop();
+    
             if (current_max_pair.pairCount <= 1 || unusedChar.empty())
             {
                 break;
             }
+    
             char newToken = unusedChar.front();
             unusedChar.erase(unusedChar.begin());
+    
             dictionary_token[newToken] = current_max_pair.pairName;
             dictionary_pair[current_max_pair.pairName] = newToken;
             //  Replace and generate new sequence
             merge_and_update_sequence(data_sequence, current_max_pair.pairName, newToken);
             update_pair_counts_and_pq(data_sequence);
         }
+    
         for (auto &[token, pair] : dictionary_token)
         {
             outputFile << token << pair; 

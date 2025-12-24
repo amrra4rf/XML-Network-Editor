@@ -339,85 +339,26 @@ string extractTagName(const string& rawTag) {
 
 
 
-    void fixXmlToFile(const string& xml, const vector<int>& errorLines, const string& outputFilePath) {
-    string fixedOutput = "";
-    vector<string> tagStack;
-    size_t pos = 0;
-    int currentLine = 1;
+   void fixXmlToFile(const string& xml, const vector<int>& errorLines, const string& outputFolderPath) {
+    // Get the fixed XML string
+    string fixedXml = fixXml(xml, errorLines);
 
-    while (pos < xml.length()) {
-        size_t openBracket = xml.find('<', pos);
-        string textChunk;
-        if (openBracket == string::npos) textChunk = xml.substr(pos);
-        else textChunk = xml.substr(pos, openBracket - pos);
+    // Ensure the output folder exists
+    filesystem::create_directories(outputFolderPath);
 
-        for (char c : textChunk) if (c == '\n') currentLine++;
-        fixedOutput += textChunk;
-
-        if (openBracket == string::npos) break;
-
-        size_t closeBracket = xml.find('>', openBracket);
-        if (closeBracket == string::npos) break;
-
-        string fullTag = xml.substr(openBracket, closeBracket - openBracket + 1);
-        string tagContent = xml.substr(openBracket + 1, closeBracket - openBracket - 1);
-
-        if (!tagContent.empty() && tagContent[0] != '?' && tagContent[0] != '!') {
-            string tagName;
-            bool isClosing = (tagContent[0] == '/');
-            if (isClosing) tagName = trim(tagContent.substr(1));
-            else {
-                tagName = tagContent;
-                size_t space = tagName.find(' ');
-                if (space != string::npos) tagName = tagName.substr(0, space);
-                tagName = trim(tagName);
-            }
-
-            if (isClosing) {
-                if (!tagStack.empty() && tagStack.back() == tagName) {
-                    tagStack.pop_back(); 
-                    fixedOutput += fullTag;
-                } else if (!tagStack.empty() && vectorContainsInt(errorLines, currentLine)) {
-                    while (!tagStack.empty() && tagStack.back() != tagName) {
-                        fixedOutput += "</" + tagStack.back() + ">"; 
-                        tagStack.pop_back();
-                    }
-                    if (!tagStack.empty()) tagStack.pop_back();
-                    fixedOutput += fullTag;
-                } else {
-                    fixedOutput += fullTag;
-                }
-            } else {
-                // Opening tag
-                if (tagContent.back() != '/') tagStack.push_back(tagName);
-                fixedOutput += fullTag;
-            }
-        } else {
-            fixedOutput += fullTag;
-        }
-
-        pos = closeBracket + 1;
-    }
-
-    // Close remaining tags
-    while (!tagStack.empty()) {
-        fixedOutput += "</" + tagStack.back() + ">";
-        tagStack.pop_back();
-    }
+    // Construct the full path for fixed.xml
+    string fullPath = outputFolderPath + "/fixed.xml";
 
     // Write to file
-    string fixedOutputPath = outputFilePath + "/fixed.xml";
-    ofstream outFile(fixedOutputPath);
+    ofstream outFile(fullPath);
     if (!outFile.is_open()) {
-        cerr << "Error: Cannot open output file: " << fixedOutputPath << endl;
+        cerr << "Error: Cannot open file " << fullPath << " for writing.\n";
         return;
     }
-    outFile << fixedOutput;
+
+    outFile << fixedXml;
     outFile.close();
 
-    cout << "Fixed XML written to: " << fixedOutputPath << endl;
+    cout << "Fixed XML written to: " << fullPath << endl;
 }
-
-
     
-

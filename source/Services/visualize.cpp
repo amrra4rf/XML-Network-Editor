@@ -112,7 +112,7 @@ void visualize(const string& inputPath, const string& outputPath, PostsBuilder& 
     // Generate PNG
     string cmd = "dot -Tpng \"" + outputPath +
                  "/network.dot\" -o \"" +
-                 outputPath + "/network.png\"";
+                 outputPath + "/network.jpg\"";
     system(cmd.c_str());
 }
 

@@ -114,7 +114,7 @@ string format(const string& json) {
     return result;
 }
 
-void convert(const string& inputPath, const string& outputPath) {
+void convert(const string& inputPath, const string& outputPath){
 
     ifstream inputFile(inputPath);
     if (!inputFile)

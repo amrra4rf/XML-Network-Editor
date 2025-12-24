@@ -1,5 +1,5 @@
 #include "../../Includes/Formater.hpp"
- 
+
 void decompress(string inputfileName, string outFileName)
     {
         ifstream inputfile(inputfileName);
@@ -32,6 +32,7 @@ void decompress(string inputfileName, string outFileName)
             if ((pair + token) != "###")
                 dictionary_token_decomp[token] = pair;
         }
+    
         for (auto it = dictionary_token_decomp.rbegin(); it != dictionary_token_decomp.rend(); ++it)
         {
             auto token_to_replace = it->first;

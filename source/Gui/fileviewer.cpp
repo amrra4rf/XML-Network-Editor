@@ -33,8 +33,6 @@
 
 using namespace std;
 
-
-
 FileViewer::FileViewer(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::FileViewer)
@@ -109,7 +107,8 @@ void FileViewer::on_minify_clicked()
     }
 
     // Set output file path to project folder: "file.xml"
-    QString outFileName =QDir::cleanPath(QDir::currentPath() + "/../../../../output")+ "/minified.xml";
+    // Correct path for Release / Standalone App
+    QString outFileName = QDir::currentPath() + "/output/minified.xml";
 
     // Call your existing minifying function
     minifying(m_filePath.toStdString(), outFileName.toStdString());
@@ -128,7 +127,7 @@ void FileViewer::on_compress_clicked()
     }
 
     // Set output file path to project folder: "file.xml"
-    QString outFileName =QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/compressed.comp";
+ QString outFileName = QDir::currentPath() + "/output//compressed.comp";
 
     // Call your existing minifying function
     compress(m_filePath.toStdString(), outFileName.toStdString());
@@ -145,7 +144,7 @@ void FileViewer::on_decompress_clicked()
                                                     QDir::homePath(),      // Default directory
                                                     tr("All Files (*.*);;Text Files (*.txt)") // Filter
                                                     );
-    QString outFileName = QDir::cleanPath(QDir::currentPath() + "/../../../../output")+ "/decompressed.xml";
+ QString outFileName = QDir::currentPath() + "/output/decompressed.xml";
 
 
     if (!fileName.isEmpty()) {
@@ -167,7 +166,7 @@ void FileViewer::on_format_clicked()
     }
 
     // Set output file path to project folder: "file.xml"
-    QString outFileName = QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/formated.xml";
+ QString outFileName = QDir::currentPath() + "/output/formated.xml";
 
     // Call your existing minifying function
     Format_XML_File(m_filePath.toStdString(), outFileName.toStdString());
@@ -184,7 +183,7 @@ void FileViewer::on_convert_clicked()
     }
 
     // Set output file path to project folder: "file.xml"
-    QString outFileName = QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/xmlToJson.json";
+QString outFileName = QDir::currentPath() + "/output/xmlToJson.json";
 
     convert(m_filePath.toStdString(),outFileName.toStdString());
 
@@ -236,7 +235,7 @@ void FileViewer::on_vaild_clicked()
             std::string fixedXml = fixXml(xmlContent, errorLines);
 
             // Save as a new file "fixed.xml" in the current project directory
-            QString fixedFilePath = QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/fixed.xml";
+            QString fixedFilePath =QDir::currentPath() + "/output/fixed.xml";
             std::ofstream outFile(fixedFilePath.toStdString());
             if (outFile.is_open()) {
                 outFile << fixedXml;
@@ -277,7 +276,7 @@ void FileViewer::on_represent_clicked()
         formattedFile.toStdString()
         );
 
-    QString outputDir = QDir::cleanPath(QDir::currentPath() + "/../../../../output") + "/representation";
+    QString outputDir = QDir::currentPath() + "/output/representation";
     QDir dir(outputDir);
     if (!dir.exists()) {
         dir.mkpath(".");
@@ -339,6 +338,12 @@ void FileViewer::on_influencer_clicked()
     QMessageBox::information(this, "Most Influencer User",
                              QString::fromStdString(u.getName()) + " (ID: " + QString::number(u.getId()) + ")");
 }
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QListWidget>
+#include <QDialogButtonBox>
+#include <QLabel>
+
 void FileViewer::on_mutual_clicked()
 {
     if (m_filePath.isEmpty()) {
@@ -352,53 +357,93 @@ void FileViewer::on_mutual_clicked()
         return;
     }
 
-    // 2. Prepare formatting
-    resetBuilder(); // Clear IDs before rebuilding graph
+    // --- STEP 2: PREPARE GRAPH ---
+    resetBuilder();
     QString formattedFile = QDir::currentPath() + "/formatted.xml";
     Format_XML_File(m_filePath.toStdString(), formattedFile.toStdString());
-
-    // 3. Initialize Graph using the class member 'builder'
     SocialNetworkGraph socialGraph(formattedFile.toStdString(), builder);
 
-    // 4. Access the users list
+    // Get all users to populate the list
     const auto& users = socialGraph.network.getUsers();
-
     if (users.size() < 2) {
-        QMessageBox::information(this, "Mutual Followers", "Not enough users to compare.");
+        QMessageBox::information(this, "Mutual Followers", "Not enough users in the file to compare.");
         return;
     }
 
-    QString msg = "Mutual Followers for each user pair:\n\n";
+    // --- STEP 3: CREATE SELECTION DIALOG ---
+    QDialog selectDialog(this);
+    selectDialog.setWindowTitle("Select Users");
+    selectDialog.setMinimumWidth(300);
+    selectDialog.setMinimumHeight(400);
 
-    // 5. Calculate intersections
-    for (size_t i = 0; i < users.size(); ++i) {
-        for (size_t j = i + 1; j < users.size(); ++j) {
-            std::vector<int> ids = { users[i].getId(), users[j].getId() };
-            std::vector<Users> mutuals = socialGraph.getMutualFollowers(ids);
+    QVBoxLayout* layout = new QVBoxLayout(&selectDialog);
+    QLabel* label = new QLabel("Select at least 2 users (Ctrl+Click to select multiple):", &selectDialog);
+    layout->addWidget(label);
 
-            msg += QString("Users %1 & %2:\n")
-                       .arg(QString::fromStdString(users[i].getName()))
-                       .arg(QString::fromStdString(users[j].getName()));
+    // Create List Widget for Multi-Selection
+    QListWidget* listWidget = new QListWidget(&selectDialog);
+    listWidget->setSelectionMode(QAbstractItemView::MultiSelection); // Enable multi-select
 
-            if (mutuals.empty()) {
-                msg += "  No mutual followers\n\n";
-            } else {
-                for (const Users& u : mutuals) {
-                    msg += QString("  - %1 (ID: %2)\n")
-                    .arg(QString::fromStdString(u.getName()))
-                        .arg(u.getId());
-                }
-                msg += "\n";
+    // Populate list with User Name and ID
+    for (const auto& user : users) {
+        QString userLabel = QString::fromStdString(user.getName()) + " (ID: " + QString::number(user.getId()) + ")";
+        QListWidgetItem* item = new QListWidgetItem(userLabel);
+        // Store the actual ID in the item's data for easy retrieval later
+        item->setData(Qt::UserRole, user.getId());
+        listWidget->addItem(item);
+    }
+    layout->addWidget(listWidget);
+
+    // Add OK/Cancel buttons
+    QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &selectDialog);
+    layout->addWidget(buttons);
+    connect(buttons, &QDialogButtonBox::accepted, &selectDialog, &QDialog::accept);
+    connect(buttons, &QDialogButtonBox::rejected, &selectDialog, &QDialog::reject);
+
+    // --- STEP 4: HANDLE SELECTION ---
+    if (selectDialog.exec() == QDialog::Accepted) {
+        QList<QListWidgetItem*> selectedItems = listWidget->selectedItems();
+
+        if (selectedItems.size() < 2) {
+            QMessageBox::warning(this, "Selection Error", "Please select at least 2 users.");
+            return;
+        }
+
+        // Extract IDs from selection
+        std::vector<int> selectedIds;
+        QString namesStr;
+        for (auto* item : selectedItems) {
+            selectedIds.push_back(item->data(Qt::UserRole).toInt());
+            namesStr += item->text() + "\n";
+        }
+
+        // --- STEP 5: CALCULATE MUTUALS ---
+        // Assuming your backend supports finding mutuals for N users (intersection of all N)
+        // If your getMutualFollowers only takes 2 IDs, you might need to adapt logic.
+        // Based on your CLI logic earlier, it seemed to handle a vector of IDs.
+        std::vector<Users> mutuals = socialGraph.getMutualFollowers(selectedIds);
+
+        // --- STEP 6: DISPLAY RESULTS ---
+        QString msg = "Selected Users:\n" + namesStr + "\n";
+        msg += "----------------------------------------\n";
+        msg += "Mutual Followers (Common to ALL selected):\n\n";
+
+        if (mutuals.empty()) {
+            msg += "No mutual followers found.";
+        } else {
+            for (const Users& u : mutuals) {
+                msg += QString(" - %1 (ID: %2)\n")
+                .arg(QString::fromStdString(u.getName()))
+                    .arg(u.getId());
             }
         }
-    }
 
-    // 6. Display in scrollable box
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("Mutual Followers");
-    msgBox.setText("Results of pair-wise mutual follower search:");
-    msgBox.setDetailedText(msg);
-    msgBox.exec();
+        QMessageBox resultsBox;
+        resultsBox.setWindowTitle("Mutual Followers Results");
+        resultsBox.setText("Calculation Complete");
+        resultsBox.setDetailedText(msg);
+        resultsBox.exec();
+    }
 }
 void FileViewer::on_suggested_clicked()
 {

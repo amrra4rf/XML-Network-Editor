@@ -1,16 +1,12 @@
 <users>
     <user>
-        <id>
-            1
-        </id>
-        <name>
-            Ahmed Ali
-        </name>
+        <id>1</id>
+        <name>Ahmed Ali<name>
         <posts>
             <post>
                 <body>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </body>
+                <body>
                 <topics>
                     <topic>
                         economy
@@ -33,24 +29,16 @@
         </posts>
         <followers>
             <follower>
-                <id>
-                    2
-                </id>
+                <id>2</id>
             </follower>
             <follower>
-                <id>
-                    3
-                </id>
+                <id>3</id>
             </follower>
         </followers>
     </user>
     <user>
-        <id>
-            2
-        </id>
-        <name>
-            Yasser Ahmed
-        </name>
+        <id>2</id>
+        <name>Yasser Ahmed</name>
         <posts>
             <post>
                 <body>
@@ -65,19 +53,13 @@
         </posts>
         <followers>
             <follower>
-                <id>
-                    1
-                </id>
+                <id>1</id>
             </follower>
         </followers>
     </user>
     <user>
-        <id>
-            3
-        </id>
-        <name>
-            Mohamed Sherif
-        </name>
+        <id>3</id>
+        <name>Mohamed Sherif</name>
         <posts>
             <post>
                 <body>
@@ -92,9 +74,7 @@
         </posts>
         <followers>
             <follower>
-                <id>
-                    1
-                </id>
+                <id>1</id>
             </follower>
         </followers>
     </user>

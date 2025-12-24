@@ -1,0 +1,65 @@
+{
+  "users": {
+    "user": {
+      "id": "1",
+      "name": "AhmedAli",
+      "posts": {
+        "post": {
+          "body": "post1amr",
+          "topics": {
+            "topic": "economy",
+            "topic": "finance"
+          }
+        },
+        "post": {
+          "body": "post1youssef",
+          "topics": {
+            "topic": "solar_energy"
+          }
+        }
+      },
+      "followers": {
+        "follower": {
+          "id": "2"
+        },
+        "follower": {
+          "id": "3"
+        }
+      }
+    },
+    "user": {
+      "id": "2",
+      "name": "YasserAhmed",
+      "posts": {
+        "post": {
+          "body": "Loremipsumdolorsitamet,consecteturadipiscingelit,seddoeiusmodtemporincididuntutlaboreetdoloremagnaaliqua.Utenimadminimveniam,quisnostrudexercitationullamcolaborisnisiutaliquipexeacommodoconsequat.",
+          "topics": {
+            "topic": "education"
+          }
+        }
+      },
+      "followers": {
+        "follower": {
+          "id": "1"
+        }
+      }
+    },
+    "user": {
+      "id": "3",
+      "name": "MohamedSherif",
+      "posts": {
+        "post": {
+          "body": "post2amr",
+          "topics": {
+            "topic": "sports"
+          }
+        }
+      },
+      "followers": {
+        "follower": {
+          "id": "1"
+        }
+      }
+    }
+  }
+}

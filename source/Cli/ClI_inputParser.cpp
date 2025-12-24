@@ -17,10 +17,12 @@ void Parse_input(string action,
         vector<int> errorLines;
 
         checkConsistency(readFile(inputPath), errorLog, errorLines);
-
+        if(errorLog.size()==0)cout<<"Valid"<<endl;
+        else{ cout<<"invlaid"<<endl;
+            cout<<"Number of errors are: "<<errorLog.size()<<endl;
         for (const auto& e : errorLog) cout << e << endl;
-        for (int l : errorLines) cout << l << endl;
-
+       
+        }
         if (!flags.empty() && flags[0].first == "f" && !errorLines.empty()) {
             fixXmlToFile(readFile(inputPath), errorLines, outputPath);
         }
@@ -62,7 +64,7 @@ void Parse_input(string action,
         namespace fs = std::filesystem;
 
         fs::create_directories(outputPath);
-        string outFile = (fs::path(outputPath) / "compressed.xml").string();
+        string outFile = (fs::path(outputPath) / "compressed.comp").string();
 
         compress(inputPath, outFile);
         cout << "Compressed file: " << outFile << endl;
@@ -124,32 +126,98 @@ void Parse_input(string action,
     }
 
     /* ================= MUTUAL ================= */
-    else if (action == "mutual") {
-        resetBuilder();
-        string formatted = outputPath + "/XML_formatted.xml";
-        Format_XML_File(inputPath, formatted);
+else if (action == "mutual") {
 
-        SocialNetworkGraph network(formatted, builder);
-        const auto& users = network.getGraph().getUsers();
+    // -------- get ids from flags --------
+    string idsArg = "";
 
-        for (size_t i = 0; i < users.size(); ++i) {
-            for (size_t j = i + 1; j < users.size(); ++j) {
-                vector<int> ids = {users[i].getId(), users[j].getId()};
-                auto mutuals = network.getMutualFollowers(ids);
-
-                cout << users[i].getName() << " & " << users[j].getName() << ":\n";
-                if (mutuals.empty()) cout << "  No mutual followers\n\n";
-                else {
-                    for (const auto& u : mutuals)
-                        cout << "  - " << u.getName() << " (ID " << u.getId() << ")\n";
-                    cout << endl;
-                }
-            }
+    for (const auto& f : flags) {
+        if (f.first == "ids") {
+            idsArg = f.second;   // example: "1,2,3"
+            break;
         }
     }
 
+    if (idsArg.empty()) {
+        cerr << "Error: -ids is required (example: -ids 1,2,3)\n";
+        return;
+    }
+
+    // -------- parse ids --------
+    vector<int> ids;
+    string token;
+    stringstream ss(idsArg);
+
+    while (getline(ss, token, ',')) {
+        ids.push_back(stoi(token));
+    }
+
+    if (ids.size() < 2) {
+        cerr << "Error: mutual requires at least 2 user IDs\n";
+        return;
+    }
+
+    // -------- prepare graph --------
+    resetBuilder();
+    string formatted = outputPath + "/XML_formatted.xml";
+    Format_XML_File(inputPath, formatted);
+
+    SocialNetworkGraph network(formatted, builder);
+
+    // -------- validate users --------
+    for (int id : ids) {
+        if (network.getGraph().getUserFromID(id).getId() == -1) {
+            cerr << "Error: User ID " << id << " not found\n";
+            return;
+        }
+    }
+
+    // -------- mutual followers logic --------
+    vector<int> mutuals = network.network.GetFollowers(
+        network.getGraph().getUserFromID(ids[0])
+    );
+
+    for (size_t i = 1; i < ids.size(); ++i) {
+        vector<int> nextFollowers =
+            network.network.GetFollowers(network.getGraph().getUserFromID(ids[i]));
+
+        vector<int> intersection;
+
+        for (int a : mutuals) {
+            for (int b : nextFollowers) {
+                if (a == b) {
+                    intersection.push_back(a);
+                    break;
+                }
+            }
+        }
+        mutuals = intersection;
+    }
+
+    // -------- output --------
+    cout << "Mutual followers of users: ";
+    for (size_t i = 0; i < ids.size(); ++i) {
+        cout << ids[i];
+        if (i + 1 < ids.size()) cout << ", ";
+    }
+    cout << ":\n";
+
+    if (mutuals.empty()) {
+        cout << "  No mutual followers\n";
+    } else {
+        for (int uid : mutuals) {
+            Users u = network.getGraph().getUserFromID(uid);
+            cout << "  - " << u.getName()
+                 << " (ID " << u.getId() << ")\n";
+        }
+    }
+}
+
+
+
+
     /* ================= SUGGEST ================= */
-    else if (action == "suggest") {
+   else if (action == "suggest") {
         resetBuilder();
         string formatted = outputPath + "/XML_formatted.xml";
         Format_XML_File(inputPath, formatted);
@@ -157,21 +225,57 @@ void Parse_input(string action,
         SocialNetworkGraph network(formatted, builder);
         auto suggestions = network.getSuggestions();
 
-        for (const auto& [uid, list] : suggestions) {
-            cout << "Suggestions for "
-                 << network.getGraph().getUserFromID(uid).getName() << ":\n";
+        // 1. Check if user provided an ID via flags (e.g., -id 1)
+        int targetId = -1;
+        for (const auto& f : flags) {
+            if (f.first == "id") {
+                if (!f.second.empty()) {
+                    try {
+                        targetId = stoi(f.second);
+                    } catch (...) {
+                        cerr << "Error: Invalid ID format.\n";
+                        return;
+                    }
+                }
+                break;
+            }
+        }
 
-            if (list.empty()) cout << "  No suggestions\n\n";
-            else {
-                for (const auto& u : list)
-                    cout << "  - " << u.getName() << " (ID " << u.getId() << ")\n";
-                cout << endl;
+        // 2. Output Logic
+        if (targetId != -1) {
+            // --- SINGLE USER MODE ---
+            if (suggestions.find(targetId) != suggestions.end()) {
+                auto list = suggestions[targetId];
+                cout << "Suggestions for "
+                     << network.getGraph().getUserFromID(targetId).getName() << ":\n";
+
+                if (list.empty()) cout << "  No suggestions\n\n";
+                else {
+                    for (const auto& u : list)
+                        cout << "  - " << u.getName() << " (ID " << u.getId() << ")\n";
+                    cout << endl;
+                }
+            } else {
+                cout << "User with ID " << targetId << " not found or has no suggestions.\n";
+            }
+        } else {
+            // --- ALL USERS MODE (Default if no -id is provided) ---
+            for (const auto& [uid, list] : suggestions) {
+                cout << "Suggestions for "
+                     << network.getGraph().getUserFromID(uid).getName() << ":\n";
+
+                if (list.empty()) cout << "  No suggestions\n\n";
+                else {
+                    for (const auto& u : list)
+                        cout << "  - " << u.getName() << " (ID " << u.getId() << ")\n";
+                    cout << endl;
+                }
             }
         }
     }
 
     /* ================= SEARCH ================= */
-    else if (action == "search") {
+else if (action == "search") {
     if (flags.empty()) {
         cerr << "No search flags provided\n";
         return;
@@ -179,8 +283,9 @@ void Parse_input(string action,
 
     resetBuilder();
 
-    Format_XML_File(inputPath, outputPath);
+    // Make sure formatted points to a file
     string formatted = outputPath + "/XML_formatted.xml";
+    Format_XML_File(inputPath, formatted);
 
     SocialNetworkGraph network(formatted, builder);
 
@@ -210,9 +315,9 @@ void Parse_input(string action,
         }
         else {
             cerr << "Unknown search flag: " << flagChar << endl;
-            }
         }
     }
+}
 
 
     /* ================= UNKNOWN ================= */

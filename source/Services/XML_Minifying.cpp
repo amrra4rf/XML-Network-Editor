@@ -9,6 +9,7 @@ void removeChar(int idx, string &line)
         }
         line.pop_back();
     }
+    
 void minifying(string inputFileName, string outFileName)
     {
         ifstream inputFile(inputFileName);
