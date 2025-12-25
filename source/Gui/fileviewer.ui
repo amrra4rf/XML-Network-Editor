@@ -16,9 +16,9 @@
   <widget class="QTextEdit" name="textEdit">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>-10</x>
      <y>0</y>
-     <width>1681</width>
+     <width>1691</width>
      <height>681</height>
     </rect>
    </property>
